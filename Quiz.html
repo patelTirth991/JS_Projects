@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    #quiz-container {
+      width: 50%;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 50px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .option {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #e4e4e4;
+      border: none;
+      cursor: pointer;
+    }
+    .option.selected {
+      outline: 2px solid #248ecf;
+      background-color: #dbefff;
+    }
+    .option:hover {
+      background-color: #d4d4d4;
+    }
+    #nextBtn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #248ecf;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #nextBtn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #prevBtn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #248ecf;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #prevBtn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #timer {
+      text-align: right;
+      font-size: 14px;
+      color: #555;
+    }
+    #result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2>Simple Quiz</h2>
+    <div id="timer">Time left: <span id="time">30</span>s</div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="nextBtn">Next</button>
+    <button id="prevBtn">Prev</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the capital of India?",
+        option: ["New Delhi", "Mumbai", "Kolkata", "Chennai"],
+        correct: "New Delhi"
+      },
+      {
+        question: "Who is the President of India?",
+        option: ["Droupadi Murmu", "Narendra Modi", "Amit Shah", "Rajnath Singh"],
+        correct: "Droupadi Murmu"
+      },
+      {
+        question: "What does HTML stand for?",
+        option: ["Hyper Text Markup Language", "Hot Mail", "How to Make Lasagna", "None of these"],
+        correct: "Hyper Text Markup Language"
+      },
+      {
+        question: "What year was JavaScript launched?",
+        option: ["1996", "1995", "1994", "None of these"],
+        correct: "1995"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        option: ["Earth", "Mars", "Jupiter", "Saturn"],
+        correct: "Mars"
+      }
+    ];
+
+let currentQuestion = 0;
+let score = 0;
+let timeLeft = 30;
+let timer;
+const userAnswers = new Array(quizData.length).fill(null); 
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const timeEl = document.getElementById("time");
+const resultEl = document.getElementById("result");
+const prevBtn = document.getElementById("prevBtn");
+
+function startTimer() {
+  timeLeft = 30;
+  timeEl.innerText = timeLeft;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timeLeft--;
+    timeEl.innerText = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      moveNext();
+    }
+  }, 1000);
+}
+
+function loadQuestion() {
+  if (currentQuestion >= quizData.length) {
+    clearInterval(timer);
+    showResult();
+    return;
+  }
+
+  const q = quizData[currentQuestion];
+  questionEl.innerText = q.question;
+  optionsEl.innerHTML = "";
+
+  const selectedAnswer = userAnswers[currentQuestion];
+
+  q.option.forEach(option => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.innerText = option;
+
+    if (option === selectedAnswer) {
+      button.classList.add("selected");
+    }
+
+    button.addEventListener("click", () => selectOption(button, option));
+    optionsEl.appendChild(button);
+  });
+
+  prevBtn.disabled = currentQuestion === 0; 
+
+  startTimer();
+}
+
+function selectOption(button, optionText) {
+  userAnswers[currentQuestion] = optionText;
+
+  const allOptions = document.querySelectorAll(".option");
+  allOptions.forEach(btn => btn.classList.remove("selected"));
+
+  button.classList.add("selected");
+}
+
+function moveNext() {
+  clearInterval(timer);
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    calculateScore();
+    showResult();
+  }
+}
+
+function movePrev() {
+  clearInterval(timer);
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    loadQuestion();
+  }
+}
+
+function calculateScore() {
+  score = 0;
+  for (let i = 0; i < quizData.length; i++) {
+    if (userAnswers[i] === quizData[i].correct) {
+      score++;
+    }
+  }
+}
+
+nextBtn.addEventListener("click", () => {
+  moveNext();
+});
+
+prevBtn.addEventListener("click", () => {
+  movePrev();
+});
+
+function showResult() {
+  questionEl.style.display = "none";
+  optionsEl.style.display = "none";
+  nextBtn.style.display = "none";
+  prevBtn.style.display = "none";
+  document.getElementById("timer").style.display = "none";
+  resultEl.innerHTML = `You scored ${score} out of ${quizData.length}`;
+}
+
+loadQuestion();
+  </script>
+</body>
+</html>
