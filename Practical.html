@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+    <style>
+        .product-list {
+            margin-top: 20px;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .product-item button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Management</h1>
+    <input type="text" id="pname" placeholder="Product Name"><br><br>
+    <input type="text" id="pprice" placeholder="Product Price"><br><br>
+
+    <button id="add">ADD</button>
+    <button id="edit" style="display: none;">EDIT</button> 
+    <button id="delet" style="display: none;">DELETE</button> 
+
+    <div class="product-list">
+    </div>
+
+    <script>
+        let editIndex = null; 
+
+        document.querySelector("#add").addEventListener("click", () => {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            let name = document.querySelector("#pname").value.trim();
+            let price = document.querySelector("#pprice").value.trim();
+
+            if (name && price) {
+                let product = { name, price };
+                if (editIndex === null) {
+                    products.push(product);
+                } else {
+                    products[editIndex] = product; 
+                    editIndex = null; 
+                    document.querySelector("#add").textContent = "Add"; 
+                }
+
+                localStorage.setItem("products", JSON.stringify(products));
+                document.querySelector("#pname").value = "";
+                document.querySelector("#pprice").value = "";
+
+                DisplayProduct();
+            } else {
+                alert("Please enter both product name and price.");
+            }
+        });
+
+        function DisplayProduct() {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            let container = document.querySelector(".product-list");
+            container.innerHTML = ""; 
+
+            products.forEach((product, index) => {
+                let productDiv = document.createElement("div");
+                productDiv.classList.add("product-item");
+                productDiv.innerHTML = `
+                    <span>${product.name} - $${product.price}</span>
+                    <button onclick="UpdateProduct(${index})">Edit</button>
+                    <button onclick="DeleteProduct(${index})">Delete</button>
+                `;
+                container.appendChild(productDiv);
+            });
+        }
+
+        function UpdateProduct(index) {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            let selected = products[index];
+
+            document.querySelector("#pname").value = selected.name;
+            document.querySelector("#pprice").value = selected.price;
+
+            editIndex = index;
+            document.querySelector("#add").textContent = "Update"; 
+            document.querySelector("#edit").style.display = "block"; 
+            document.querySelector("#delet").style.display = "block"; 
+        }
+
+        function DeleteProduct(index) {
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+            products.splice(index, 1); 
+            localStorage.setItem("products", JSON.stringify(products));
+
+            DisplayProduct();
+        }
+        DisplayProduct();
+        
+    </script>
+</body>
+</html>
