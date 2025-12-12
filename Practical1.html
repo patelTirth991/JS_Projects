@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav>
+        <h2>Logo</h2>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><i class="ri-user-line"></i></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>We Support Businesses From<br> Launch To Exit.</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                Atque necessitatibus aut nisi officia in. 
+                Excepturi reprehenderit necessitatibus facilis similique 
+                repudiandae, culpa iste natus error aliquid perspiciatis deserunt ea?
+            </p>
+            <a href="#" class="btn">Learn More</a>
+        </div>
+
+        <div class="circle"></div>
+
+        <img src="men.png" class="man" alt="Man">
+    </section>
+
+<style>
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #e9f5e7;
+    }
+
+    nav {
+        background: #0e5166;
+        padding: 18px 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+
+    nav ul {
+        display: flex;
+        gap: 26px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: white;
+        font-size: 19px;
+    }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 60px;
+        min-height: 80vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-text {
+        max-width: 430px;
+    }
+
+    .hero-text h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 36px;
+        font-style: italic;
+        line-height: 46px;
+        margin-bottom: 20px;
+    }
+
+    .hero-text p {
+        font-size: 15px;
+        line-height: 24px;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        background: #f38c22;
+        padding: 12px 25px;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .circle {
+        width: 620px;
+        height: 620px;
+        background: #f38c22;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -100px;
+        right: -120px;
+        z-index: 1;
+    }
+
+    .man {
+        position: absolute;
+        right: 50px;
+        bottom: 0;
+        height: 500px;
+        z-index: 2;
+    }
+
+</style>
+
+</body>
+</html>
